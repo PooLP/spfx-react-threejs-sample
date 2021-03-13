@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "spfx-react-threejs-sample-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spfxReactThreejsSample/SpfxReactThreejsSampleWebPart.js",
+          "manifest": "./src/webparts/spfxReactThreejsSample/SpfxReactThreejsSampleWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SpfxReactThreejsSampleWebPartStrings": "lib/webparts/spfxReactThreejsSample/loc/{locale}.js"
+  }
+}
