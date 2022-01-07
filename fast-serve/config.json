@@ -5,6 +5,5 @@
   },
   "serve": {
     "open": false
-  },
-  "eslint": true
+  }
 }

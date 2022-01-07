@@ -1,21 +1,21 @@
 // React
 import * as React from 'react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 
 // R3F
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame } from 'react-three-fiber';
 import { Mesh } from 'three';
 
 // Context du webpart
-import { AppContext } from '../AppContext';
+//import { AppContext } from '../AppContext';
 
 // Interface
-import { IShortcutsProps } from './IShortcutsProps';
+import { ISliderProps } from './ISliderProps';
 
-export const Slider: FC<IShortcutsProps> = (props) => {
+export const Slider: FC<ISliderProps> = (_props) => {
 
   // Context state
-  const { context, theme } = React.useContext(AppContext);
+  //const { context, theme } = React.useContext(AppContext);
 
   /**
    * Methods
@@ -30,7 +30,7 @@ export const Slider: FC<IShortcutsProps> = (props) => {
   /**
    * Render
    */
-  function Box(boxProps : Mesh) {
+  function Box(boxProps) {
     // This reference gives us direct access to the THREE.Mesh object
     const ref = useRef<Mesh>(null!);
     // Hold state for hovered and clicked events
@@ -39,12 +39,12 @@ export const Slider: FC<IShortcutsProps> = (props) => {
     // Subscribe this component to the render-loop, rotate the mesh every frame
     useFrame((state, delta) => (ref.current.rotation.x += 0.01));
     // Return the view, these are regular Threejs elements expressed in JSX
-    
+
     return (
       <mesh
         {...boxProps}
         ref={ref}
-        scale={clicked ? 1.5 : 1}
+        scale={clicked ? [1.5, 1.5, 1.5] : [1, 1, 1]}
         onClick={(event) => click(!clicked)}
         onPointerOver={(event) => hover(true)}
         onPointerOut={(event) => hover(false)}>

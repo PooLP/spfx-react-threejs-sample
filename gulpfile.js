@@ -5,11 +5,8 @@ const build = require('@microsoft/sp-build-web');
 const fs = require('fs');
 const path = require('path');
 const bundleAnalyzer = require('webpack-bundle-analyzer');
-const eslint = require('gulp-eslint7');
 
 build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`);
-
-build.tslintCmd.enabled = false;
 
 var getTasks = build.rig.getTasks;
 build.rig.getTasks = function () {
@@ -52,69 +49,6 @@ build.configureWebpack.mergeConfig({
     return generatedConfiguration;
   }
 });
-
-/**
- * update-version: prend le numero de version (SemVer) du package.json et le met dans package-solution.json
- */
-const updateVersionTask = build.subTask('update-version', async function (gulp, buildOptions, done) {
-  const buildNumber = '365';
-  const pkgSolution = require('./config/package-solution.json');
-  const pkgJson = require('./package.json');
-  const npmVersion = pkgJson.version;
-  this.log('Old Version:\t' + pkgSolution.solution.version);
-  this.log('Package version:\t' + npmVersion);
-
-  let newVersionNumber = `${npmVersion}.${buildNumber}`;
-  pkgSolution.solution.version = newVersionNumber;
-  this.log('New Version:\t' + pkgSolution.solution.version);
-
-  fs.writeFile('./config/package-solution.json', JSON.stringify(pkgSolution, null, 4), (error) => {
-    if (error) {
-      this.logError('Error writing new package-solution.json file');
-      this.logError(error);
-    }
-    else
-      this.log('New version applied');
-
-    done();
-  });
-});
-
-/**
- * Remplace le contenu du fichier de config par celui de l'environnement en cours
- */
-const updateConfigTask = build.subTask('update-config', async function (gulp, buildOptions, done) {
-  const env = buildOptions.args["env"];
-  if (!!env) {
-    const configPath = './src/config/config.ts'
-    const newConfigPath = `./src/config/config.${env}.ts`;
-
-    if (fs.existsSync(newConfigPath)) {
-      const newConfig = fs.readFileSync(newConfigPath);
-      fs.writeFile(configPath, newConfig, (error) => {
-        if (error) {
-          this.logError('Error writing new config.ts file');
-          this.logError(error);
-        }
-        else
-          this.log('Config file was rewritten');
-
-        done();
-      });
-    }
-    else {
-      this.logWarning(`File ${newConfigPath} was not found`);
-      done();
-    }
-  }
-  else {
-    this.logWarning('No environment provided. Please provide a valid environment name using --env <environment>');
-    done();
-  }
-});
-
-build.task('update-version', updateVersionTask);
-build.task('update-config', updateConfigTask)
 
 /* fast-serve */
 const { addFastServe } = require("spfx-fast-serve-helpers");

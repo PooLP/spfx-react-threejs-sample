@@ -5,11 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "clean": "gulp clean",
-    "serve": "gulp clean && gulp bundle --custom-serve --max_old_space_size=4096 && fast-serve",
-    "build:package": "gulp clean && gulp bundle --ship && gulp package-solution --ship",
-    "release:patch": "npm version patch --no-git-tag-version && gulp update-version",
-    "release:minor": "npm version minor --no-git-tag-version && gulp update-version",
-    "release:major": "npm version major --no-git-tag-version && gulp update-version"
+    "serve": "gulp clean && gulp bundle --custom-serve --max_old_space_size=16144 && fast-serve",
+    "build:package": "gulp clean && gulp bundle --ship && gulp package-solution --ship"
   },
   "dependencies": {
     "react": "16.13.1",
@@ -21,28 +18,23 @@
     "@microsoft/sp-office-ui-fabric-core": "1.13.1",
     "office-ui-fabric-react": "7.174.1",
     "react-scripts": "^5.0.0",
-    "three": "^0.136.0",
-    "react-three-fiber": "^6.0.13"
+    "react-three-fiber": "5.x.x",
+    "three": "^0.136.0"
   },
   "devDependencies": {
+    "@microsoft/rush-stack-compiler-3.9": "latest",
+    "@microsoft/sp-build-web": "1.13.1",
+    "@microsoft/sp-module-interfaces": "1.13.1",
+    "@microsoft/sp-tslint-rules": "1.13.1",
     "@types/react": "16.9.51",
     "@types/react-dom": "16.9.8",
-    "@microsoft/sp-build-web": "1.13.1",
-    "@microsoft/sp-tslint-rules": "1.13.1",
-    "@microsoft/sp-module-interfaces": "1.13.1",
-    "gulp": "~4.0.2",
-    "ajv": "~5.2.2",
+    "@types/three": "^0.136.1",
     "@types/webpack-env": "1.13.1",
-    "@microsoft/rush-stack-compiler-4.2": "latest",
-    "typescript": "^4.2.x",
-    "webpack-bundle-analyzer": "^4.5.0",
+    "ajv": "~5.2.2",
+    "gulp": "~4.0.2",
     "spfx-fast-serve-helpers": "^1.13.0",
-    "eslint": "^8.6.0",
-    "gulp-eslint7": "^0.3.2",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "@typescript-eslint/parser": "^5.9.0",
-    "@typescript-eslint/eslint-plugin": "^5.9.0",
-    "webpack": "4.39.2"
+    "typescript": "^3.x.x",
+    "webpack": "4.39.2",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }
