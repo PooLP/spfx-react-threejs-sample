@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "clean": "gulp clean",
-    "serve": "gulp clean && gulp bundle --custom-serve --max_old_space_size=16144 && fast-serve",
+    "serve": "gulp clean && gulp bundle --custom-serve --max_old_space_size=4096 && fast-serve",
     "build:package": "gulp clean && gulp bundle --ship && gulp package-solution --ship"
   },
   "dependencies": {
@@ -17,7 +17,7 @@
     "@microsoft/sp-lodash-subset": "1.13.1",
     "@microsoft/sp-office-ui-fabric-core": "1.13.1",
     "office-ui-fabric-react": "7.174.1",
-    "react-three-fiber": "5.x.x",
+    "@react-three/fiber": "5.x.x",
     "three": "^0.136.0"
   },
   "devDependencies": {

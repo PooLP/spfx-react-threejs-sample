@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FC, useRef, useState } from 'react';
 
 // R3F
-import { Canvas, useFrame } from 'react-three-fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 
 // Context du webpart
@@ -55,17 +55,13 @@ export const Slider: FC<ISliderProps> = (_props) => {
   }
 
   return (
-    <>
-      {
-        <Canvas>
-          <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <pointLight position={[-10, -10, -10]} />
-          <Box position={[-1.2, 0, 0]} />
-          <Box position={[1.2, 0, 0]} />
-        </Canvas>
-      }
-    </>
+    <Canvas>
+      <ambientLight intensity={0.5} />
+      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+      <pointLight position={[-10, -10, -10]} />
+      <Box position={[-1.2, 0, 0]} />
+      <Box position={[1.2, 0, 0]} />
+    </Canvas>
   );
 };
 
