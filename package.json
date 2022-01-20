@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "clean": "gulp clean",
-    "serve": "gulp clean && gulp bundle --custom-serve --max_old_space_size=4096 && fast-serve",
+    "serve": "gulp clean && gulp bundle --custom-serve --max_old_space_size=4096 && cross-env NODE_ENV=production fast-serve",
     "build:package": "gulp clean && gulp bundle --ship && gulp package-solution --ship"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "typescript": "^3.9.x",
     "webpack-bundle-analyzer": "^4.5.0",
     "spfx-fast-serve-helpers": "^1.13.0",
-    "@types/three": "^0.136.1"
+    "@types/three": "^0.136.1",
+    "cross-env": "^7.0.3"
   }
 }

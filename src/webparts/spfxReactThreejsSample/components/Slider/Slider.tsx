@@ -49,7 +49,7 @@ export const Slider: FC<ISliderProps> = (_props) => {
         onPointerOver={(event) => hover(true)}
         onPointerOut={(event) => hover(false)}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={hovered ? 'hotpink' : '#ff0000'} />
+        <meshStandardMaterial color={hovered ? 'hotpink' : '#00ff00'} />
       </mesh>
     );
   }
