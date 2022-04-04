@@ -8,6 +8,7 @@ import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft
 import {
   IPropertyPaneConfiguration,
 } from '@microsoft/sp-property-pane';
+import { isEqual } from '@microsoft/sp-lodash-subset';
 
 // Localization
 import * as strings from 'SpfxReactThreejsSampleWebPartStrings';
@@ -16,12 +17,18 @@ import * as strings from 'SpfxReactThreejsSampleWebPartStrings';
 import { createTheme, ITheme } from 'office-ui-fabric-react/lib/Styling';
 
 // Component
-import { RootComponent } from './components/RootComponent';
+import { Slider } from './components/Slider/Slider';
 
 // Interface
 import { ISpfxReactThreejsSampleWebPartProps } from './ISpfxReactThreejsSampleWebPartProps';
-import { isEqual } from '@microsoft/sp-lodash-subset';
-import { IRootComponentProps } from './components/IRootComponentProps';
+import { ISliderProps } from './components/Slider/ISliderProps';
+
+// store
+import { Provider } from 'jotai';
+import { graphLibraryServiceInstanceAtom, spContextAtom, themeAtom } from './components/Slider/Slider.atom';
+
+// Services
+import GraphLibraryService, { IGraphLibraryService } from '@services/GraphLibrary.service';
 
 export default class SpfxReactThreejsSampleWebPart extends BaseClientSideWebPart<ISpfxReactThreejsSampleWebPartProps> {
 
@@ -29,23 +36,39 @@ export default class SpfxReactThreejsSampleWebPart extends BaseClientSideWebPart
   private _themeVariant: IReadonlyTheme;
   private _theme: ITheme;
 
+  private _graphLibraryServiceInstance: IGraphLibraryService;
+
   protected async onInit(): Promise<void> {
     await super.onInit();
 
     // theme
     this._initThemeVariant();
+
+    // Services
+    this._graphLibraryServiceInstance = this.context.serviceScope.consume(GraphLibraryService.serviceKey);
+    await this._graphLibraryServiceInstance.init();
+
+    return Promise.resolve();
   }
 
   public render(): void {
-    const element: React.ReactElement<IRootComponentProps> = React.createElement(
-      RootComponent,
-      {
-        context: this.context,
-        theme: this._theme
-      }
-    );
 
-    ReactDom.render(element, this.domElement);
+    this._theme = this._themeVariant as ITheme;
+
+    const element: React.ReactElement<ISliderProps> = React.createElement(Slider, {
+      theme: this._theme
+    });
+
+    const jotaiProvider = React.createElement(
+      Provider,
+      {
+        initialValues: [
+          [spContextAtom, this.context],
+          [graphLibraryServiceInstanceAtom, this._graphLibraryServiceInstance]
+        ]
+      }, element);
+
+    ReactDom.render(jotaiProvider, this.domElement);
   }
 
   protected onDispose(): void {
