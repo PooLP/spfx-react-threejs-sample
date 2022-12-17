@@ -13,6 +13,17 @@
       "privacyUrl": "",
       "termsOfUseUrl": "",
       "mpnId": ""
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "spfx-react-threejs-sample-client-side-solution"
+      },
+      "longDescription": {
+        "default": "spfx-react-threejs-sample-client-side-solution"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
     }
   },
   "paths": {

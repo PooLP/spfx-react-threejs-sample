@@ -12,7 +12,7 @@ export const Minimap: FC<{ urlsAtomState }> = ({ urlsAtomState }) => {
     const ref = useRef<THREE.Mesh>();
     const scroll = useScroll();
 
-    const { height } = useThree((state) => state.viewport);
+    const { size: { height } } = useThree((state) => state.viewport);
 
     const damp = THREE.MathUtils.damp;
 
@@ -29,7 +29,7 @@ export const Minimap: FC<{ urlsAtomState }> = ({ urlsAtomState }) => {
     return (
         <group ref={ref}>
             {urlsAtomState.map((_, i) => (
-                <Line alphaWrite={null} key={i} points={geometry} color={'#fff'} position={[i * 0.06 - urlsAtomState.length * 0.03, -height / 2 + 0.6, 0]} />
+                <Line lineWidth={2} alphaWrite={null} key={i} points={geometry} color={0x0fffff} position={[i * 0.06 - urlsAtomState.length * 0.03, -height / 2 + 0.6, 0]} />
             ))}
         </group>
     );

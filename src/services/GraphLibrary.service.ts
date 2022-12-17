@@ -1,9 +1,8 @@
 // SPFx
 import { Guid, ServiceKey, ServiceScope } from '@microsoft/sp-core-library';
 import { PageContext } from '@microsoft/sp-page-context';
-import { MSGraphClientFactory, MSGraphClient } from '@microsoft/sp-http';
+import { MSGraphClientFactory, MSGraphClientV3 } from '@microsoft/sp-http';
 import { DriveItem } from '@microsoft/microsoft-graph-types';
-import { GraphError } from '@microsoft/microsoft-graph-client';
 
 // Models
 import { IResponsePayload } from '@models/IResponse';
@@ -24,7 +23,7 @@ export default class GraphLibraryService implements IGraphLibraryService {
 
     private _pageContext: PageContext;
     private _msGraphClientFactory: MSGraphClientFactory;
-    private _msGraphClient: MSGraphClient;
+    private _msGraphClient: MSGraphClientV3;
     private _msGraphVersion: string;
 
     constructor(serviceScope: ServiceScope) {
@@ -38,7 +37,7 @@ export default class GraphLibraryService implements IGraphLibraryService {
      * Init
      */
     public async init(): Promise<void> {
-        this._msGraphClient = await this._msGraphClientFactory.getClient();
+        this._msGraphClient = await this._msGraphClientFactory.getClient('3');
         this._msGraphVersion = 'beta';
     }
 
@@ -48,28 +47,26 @@ export default class GraphLibraryService implements IGraphLibraryService {
      * @returns 
      */
     public async getFilefromSpLibrary(siteId: Guid): Promise<IResponsePayload<DriveItem[]>> {
-        const response = new Promise<IResponsePayload<DriveItem[]>>(async (resolve, reject) => {
-            try {
-                if (siteId) {
-                    const query = this._msGraphClient.api(`/sites/${siteId}/drive/root/children`).version(this._msGraphVersion);
+        try {
+            if (siteId) {
+                const query = this._msGraphClient.api(`/sites/${siteId}/drive/root/children`).version(this._msGraphVersion);
 
-                    const callback = (error: GraphError, _response: { value: DriveItem[] }, rawResponse?: Response) => {
-                        if (error) {
-                            reject({ success: false, statusText: error.message, data: null });
-                        } else {
-                            resolve({ success: true, statusText: rawResponse.statusText, data: _response.value });
-                        }
-                    };
-                    await query.get(callback);
-                } else {
-                    reject({ success: false, statusText: 'siteId is empty', data: null });
-                }
-            } catch (e) {
-                if (DEBUG) console.error(e);
-                reject({ success: false, statusText: e.message, data: null });
+                const callback = (error: Error, _response: { value: DriveItem[] }, rawResponse?: Response) => {
+                    if (error) {
+                        return ({ success: false, statusText: error.message, data: null });
+                    } else {
+                        return ({ success: true, statusText: rawResponse.statusText, data: _response.value });
+                    }
+                };
+                await query.get(callback);
+            } else {
+                return ({ success: false, statusText: 'siteId is empty', data: null });
             }
-        });
-        return response;
+        } catch (e) {
+            if (DEBUG) console.error(e);
+            return ({ success: false, statusText: e.message, data: null });
+        }
+
     }
 
     /**
@@ -78,29 +75,26 @@ export default class GraphLibraryService implements IGraphLibraryService {
      * @returns 
      */
     public async uploadFileToSpLibrary(siteId: Guid, file: File): Promise<IResponsePayload<DriveItem>> {
-        const response = new Promise<IResponsePayload<DriveItem>>(async (resolve, reject) => {
-            try {
-                if (file.size < (4 * 1024 * 1024)) {
-                    if (siteId && file) {
-                        const query = this._msGraphClient.api(`/sites/${siteId}/drive/root:/cnpShortcuts/${file.name}:/content`).version(this._msGraphVersion);
+        try {
+            if (file.size < (4 * 1024 * 1024)) {
+                if (siteId && file) {
+                    const query = this._msGraphClient.api(`/sites/${siteId}/drive/root:/cnpShortcuts/${file.name}:/content`).version(this._msGraphVersion);
 
-                        const callback = (error: GraphError, _response: DriveItem, rawResponse?: Response) => {
-                            if (error) {
-                                reject({ success: false, statusText: error.message, data: null });
-                            } else {
-                                resolve({ success: true, statusText: rawResponse.statusText, data: _response });
-                            }
-                        };
-                        await query.put(file, callback);
-                    }
-                } else {
-                    // File.size>4MB, refer to https://mmsharepoint.wordpress.com/2020/01/12/an-outlook-add-in-with-sharepoint-framework-spfx-storing-mail-with-microsoftgraph/
-                    reject({ success: false, statusText: 'Size exceed 4mb', data: null });
+                    const callback = (error: Error, _response: DriveItem, rawResponse?: Response) => {
+                        if (error) {
+                            return ({ success: false, statusText: error.message, data: null });
+                        } else {
+                            return ({ success: true, statusText: rawResponse.statusText, data: _response });
+                        }
+                    };
+                    await query.put(file, callback);
                 }
-            } catch (e) {
-                reject({ success: false, statusText: e.message, data: null });
+            } else {
+                // File.size>4MB, refer to https://mmsharepoint.wordpress.com/2020/01/12/an-outlook-add-in-with-sharepoint-framework-spfx-storing-mail-with-microsoftgraph/
+                return ({ success: false, statusText: 'Size exceed 4mb', data: null });
             }
-        });
-        return response;
+        } catch (e) {
+            return ({ success: false, statusText: e.message, data: null });
+        }
     }
 }

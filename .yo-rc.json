@@ -1,11 +1,20 @@
 {
   "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
     "isCreatingSolution": true,
-    "environment": "spo",
-    "version": "1.13.1",
+    "nodeVersion": "16.19.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.4.1"
+    },
+    "version": "1.16.1",
     "libraryName": "spfx-react-threejs-sample",
     "libraryId": "c1631efa-ff67-49b2-b524-7f0516427476",
+    "environment": "spo",   
     "packageManager": "npm",
+    "solutionName": "spfx-react-threejs-sample",
+    "solutionShortDescription": "spfx-react-threejs-sample",
+    "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "componentType": "webpart"
   }

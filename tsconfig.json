@@ -16,6 +16,7 @@
     "noUnusedLocals": false,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "noImplicitAny": false,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@microsoft"
